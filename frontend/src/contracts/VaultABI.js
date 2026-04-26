@@ -1,6 +1,6 @@
 // Contract addresses for supported networks only
 const VAULT_ADDRESSES = {
-  11155111: '0xEAebE827C8A3A4E98dFA802FC719eeBe46f06276', // Sepolia - Deployed ✅
+  11155111: '0x9b31095e9D6325d375722B4dF585a48a2E5c5579', // Sepolia - Deployed ✅
   31337: '0x5FbDB2315678afecb367f032d93F642f64180aa3', // Hardhat local
 }
 

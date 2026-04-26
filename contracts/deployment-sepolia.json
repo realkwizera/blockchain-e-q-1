@@ -1,13 +1,13 @@
 {
   "network": "sepolia",
   "chainId": 11155111,
-  "proxy": "0xEAebE827C8A3A4E98dFA802FC719eeBe46f06276",
+  "proxy": "0x9b31095e9D6325d375722B4dF585a48a2E5c5579",
   "implementation": "0x063549bf93171b03AF92b540A55b3Cf156A55F95",
   "admin": "0x0000000000000000000000000000000000000000",
-  "deployer": "0x221F7050DEf20B174BFD985269685030717f660F",
-  "owner": "0x221F7050DEf20B174BFD985269685030717f660F",
-  "timestamp": "2026-04-24T09:52:53.178Z",
+  "deployer": "0x20b2B010cef6a3198cB046B26328eC735f4093f7",
+  "owner": "0x20b2B010cef6a3198cB046B26328eC735f4093f7",
+  "timestamp": "2026-04-26T15:21:19.421Z",
   "version": "1.0.0",
   "rewardMultiplier": "500",
-  "blockNumber": 10722226
+  "blockNumber": 10736801
 }
