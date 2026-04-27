@@ -10,7 +10,7 @@ const Sidebar = ({ activeSection, setActiveSection }) => {
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
     { id: 'deposit', label: 'Deposit', icon: '💰' },
     { id: 'withdraw', label: 'Withdraw', icon: '🔄' },
-    { id: 'rewards', label: 'Rewards', icon: '🎁' },
+    // { id: 'rewards', label: 'Rewards', icon: '🎁' },
     { id: 'settings', label: 'Settings', icon: '⚙️' },
   ]
 
@@ -21,8 +21,8 @@ const Sidebar = ({ activeSection, setActiveSection }) => {
           <span className="logo-icon">🏦</span>
           {!isCollapsed && <span className="logo-text">Vault</span>}
         </div>
-        <button 
-          className="toggle-btn" 
+        <button
+          className="toggle-btn"
           onClick={() => setIsCollapsed(!isCollapsed)}
           title={isCollapsed ? 'Expand' : 'Collapse'}
         >

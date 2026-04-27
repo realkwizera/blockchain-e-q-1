@@ -1,7 +1,7 @@
 // Contract addresses for supported networks only
 const VAULT_ADDRESSES = {
   11155111: '0x9b31095e9D6325d375722B4dF585a48a2E5c5579', // Sepolia - Deployed ✅
-  31337: '0x5FbDB2315678afecb367f032d93F642f64180aa3', // Hardhat local
+  31337: '0xe7f1725e7734ce288f8367e1bb143e90bb3f0512', // Hardhat local - Proxy address
 }
 
 // Get the current chain ID and return appropriate address

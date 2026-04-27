@@ -8,6 +8,8 @@ const VaultDashboard = ({ activeSection = 'dashboard' }) => {
   const chainId = useChainId()
   const [depositAmount, setDepositAmount] = useState('')
   const [withdrawAmount, setWithdrawAmount] = useState('')
+  const [showDepositStatus, setShowDepositStatus] = useState(true)
+  const [showWithdrawStatus, setShowWithdrawStatus] = useState(true)
 
   // Get the correct contract address for current network
   const vaultAddress = getVaultAddress(chainId)
@@ -53,31 +55,31 @@ const VaultDashboard = ({ activeSection = 'dashboard' }) => {
   })
 
   // Contract write hooks
-  const { 
-    writeContract: deposit, 
+  const {
+    writeContract: deposit,
     data: depositHash,
     isPending: isDepositPending,
-    error: depositError 
+    error: depositError
   } = useWriteContract()
 
-  const { 
-    writeContract: withdraw, 
+  const {
+    writeContract: withdraw,
     data: withdrawHash,
     isPending: isWithdrawPending,
-    error: withdrawError 
+    error: withdrawError
   } = useWriteContract()
 
   // Transaction receipt hooks
-  const { 
-    isLoading: isDepositConfirming, 
-    isSuccess: isDepositConfirmed 
+  const {
+    isLoading: isDepositConfirming,
+    isSuccess: isDepositConfirmed
   } = useWaitForTransactionReceipt({
     hash: depositHash,
   })
 
-  const { 
-    isLoading: isWithdrawConfirming, 
-    isSuccess: isWithdrawConfirmed 
+  const {
+    isLoading: isWithdrawConfirming,
+    isSuccess: isWithdrawConfirmed
   } = useWaitForTransactionReceipt({
     hash: withdrawHash,
   })
@@ -91,8 +93,20 @@ const VaultDashboard = ({ activeSection = 'dashboard' }) => {
     }
   }, [isDepositConfirmed, isWithdrawConfirmed, refetchBalance, refetchDeposit, refetchReward])
 
+  // Clear transaction status when switching views
+  useEffect(() => {
+    // Reset deposit form and status
+    setDepositAmount('')
+    setShowDepositStatus(false)
+
+    // Reset withdraw form and status
+    setWithdrawAmount('')
+    setShowWithdrawStatus(false)
+  }, [activeSection])
+
   const handleDeposit = async () => {
     if (!depositAmount || parseFloat(depositAmount) <= 0) return
+    setShowDepositStatus(true)
 
     try {
       deposit({
@@ -108,6 +122,7 @@ const VaultDashboard = ({ activeSection = 'dashboard' }) => {
 
   const handleWithdraw = async () => {
     if (!withdrawAmount || parseFloat(withdrawAmount) <= 0) return
+    setShowWithdrawStatus(true)
 
     try {
       const amount = withdrawAmount === 'all' ? 0n : parseEther(withdrawAmount)
@@ -237,7 +252,7 @@ const VaultDashboard = ({ activeSection = 'dashboard' }) => {
             <div className="reward-display">
               Pending Rewards: {pendingReward ? `${parseFloat(formatEther(pendingReward)).toFixed(6)} ETH` : '0.000000 ETH'}
             </div>
-            
+
             <div className="stats-grid">
               <div className="stat-item">
                 <div className="stat-value">
@@ -310,12 +325,12 @@ const VaultDashboard = ({ activeSection = 'dashboard' }) => {
             >
               {isDepositPending || isDepositConfirming ? '⏳ Processing...' : '📥 Deposit ETH'}
             </button>
-            {status?.type === 'success' && depositHash && (
+            {status?.type === 'success' && depositHash && showDepositStatus && (
               <div className={`transaction-status status-${status.type}`}>
                 ✅ {status.message}
               </div>
             )}
-            {status?.type === 'error' && depositError && (
+            {status?.type === 'error' && depositError && showDepositStatus && (
               <div className={`transaction-status status-${status.type}`}>
                 ❌ {status.message}
               </div>
@@ -360,12 +375,12 @@ const VaultDashboard = ({ activeSection = 'dashboard' }) => {
                 All
               </button>
             </div>
-            {status?.type === 'success' && withdrawHash && (
+            {status?.type === 'success' && withdrawHash && showWithdrawStatus && (
               <div className={`transaction-status status-${status.type}`}>
                 ✅ {status.message}
               </div>
             )}
-            {status?.type === 'error' && withdrawError && (
+            {status?.type === 'error' && withdrawError && showWithdrawStatus && (
               <div className={`transaction-status status-${status.type}`}>
                 ❌ {status.message}
               </div>

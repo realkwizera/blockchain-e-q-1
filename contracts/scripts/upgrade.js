@@ -10,9 +10,15 @@ async function main() {
   const fs = require("fs");
   let deploymentInfo;
   try {
-    deploymentInfo = JSON.parse(fs.readFileSync("deployment-info.json", "utf8"));
+    // Try deployment-localhost.json first, then deployment-info.json
+    const fileToRead = fs.existsSync("deployment-localhost.json") 
+      ? "deployment-localhost.json" 
+      : "deployment-info.json";
+    deploymentInfo = JSON.parse(fs.readFileSync(fileToRead, "utf8"));
+    console.log(`📋 Loaded deployment info from: ${fileToRead}`);
   } catch (error) {
-    console.error("Could not read deployment-info.json. Please deploy first.");
+    console.error("❌ Could not read deployment files. Please run 'npm run deploy:local' first.");
+    console.error("Expected files: deployment-localhost.json or deployment-info.json");
     process.exit(1);
   }
 
@@ -63,13 +69,20 @@ async function main() {
   deploymentInfo.upgradeTimestamp = new Date().toISOString();
   deploymentInfo.implementation = await upgrades.erc1967.getImplementationAddress(proxyAddress);
 
+  // Save to same file (either deployment-localhost.json or deployment-info.json)
+  const fileToSave = fs.existsSync("deployment-localhost.json") 
+    ? "deployment-localhost.json" 
+    : "deployment-info.json";
+    
   fs.writeFileSync(
-    "deployment-info.json",
+    fileToSave,
     JSON.stringify(deploymentInfo, null, 2)
   );
 
-  console.log("\n✅ Upgrade completed successfully!");
-  console.log("Updated deployment info saved to deployment-info.json");
+  console.log(`\n✅ Upgrade completed successfully!`);
+  console.log(`📋 Updated deployment info saved to ${fileToSave}`);
+  console.log(`📍 Proxy Address: ${proxyAddress}`);
+  console.log(`🔧 Implementation Address: ${deploymentInfo.implementation}`);
 }
 
 main()

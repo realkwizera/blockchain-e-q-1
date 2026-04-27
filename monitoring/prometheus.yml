@@ -1,24 +1,54 @@
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
+  external_labels:
+    monitor: 'eth-vault-monitoring'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
 
 rule_files:
-  # - "first_rules.yml"
-  # - "second_rules.yml"
+  # - "alert_rules.yml"
+  # - "recording_rules.yml"
 
 scrape_configs:
+  # Prometheus self-monitoring
   - job_name: 'prometheus'
+    honor_timestamps: true
+    metrics_path: '/metrics'
+    scheme: http
     static_configs:
       - targets: ['localhost:9090']
+    scrape_interval: 15s
+    scrape_timeout: 10s
 
+  # Vault Exporter - Main metrics source
   - job_name: 'vault-exporter'
+    honor_timestamps: true
+    metrics_path: '/metrics'
+    scheme: http
     static_configs:
       - targets: ['vault-exporter:8080']
     scrape_interval: 10s
-    metrics_path: /metrics
+    scrape_timeout: 5s
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+      - source_labels: [job]
+        target_label: job
 
+  # Hardhat Node metrics (optional)
   - job_name: 'hardhat-node'
+    honor_timestamps: true
+    metrics_path: '/metrics'
+    scheme: http
     static_configs:
       - targets: ['hardhat-node:8545']
     scrape_interval: 30s
-    metrics_path: /metrics
+    scrape_timeout: 10s
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: 'node_.*'
+        action: keep

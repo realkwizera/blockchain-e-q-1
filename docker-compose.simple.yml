@@ -29,7 +29,7 @@ services:
       - "8080:8080"
     environment:
       - RPC_URL=http://hardhat-node:8545
-      - VAULT_ADDRESS=0x8A791620dd6260079BF849Dc5567aDC3F2FdC318
+      - VAULT_ADDRESS=0xe7f1725e7734ce288f8367e1bb143e90bb3f0512
       - PORT=8080
       - METRICS_INTERVAL=10
     depends_on:
